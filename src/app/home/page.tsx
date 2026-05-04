@@ -1,18 +1,38 @@
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
+import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
+import ShelfClient from '@/components/home/ShelfClient'
 
-export default async function HomePage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+export type Playlist = {
+  id: string
+  title: string
+  cover_image: string | null
+  created_at: string
+  Track?: { id: string }[]
+}
 
-  if (!user) redirect("/login");
+const HomePage = async () => {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const { data: profile } = await supabase
+    .from('User')
+    .select('nickname')
+    .eq('id', user.id)
+    .single()
+
+  const { data: playlists } = await supabase
+    .from('Playlist')
+    .select('id, title, cover_image, created_at')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
 
   return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold">안녕하세요 👋</h1>
-      <p className="text-muted-foreground text-sm">{user.email}</p>
-    </div>
-  );
+    <ShelfClient
+      nickname={profile?.nickname ?? user.email ?? ''}
+      playlists={(playlists ?? []) as Playlist[]}
+    />
+  )
 }
+
+export default HomePage
