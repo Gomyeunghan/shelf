@@ -19,9 +19,8 @@ const PlaylistDetailPage = async ({ params }: { params: Promise<{ id: string }> 
 
   const { data: playlist } = await supabase
     .from('Playlist')
-    .select('id, title, cover_image')
+    .select('id, title, cover_image, user_id')
     .eq('id', id)
-    .eq('user_id', user.id)
     .single()
 
   if (!playlist) notFound()
@@ -36,6 +35,7 @@ const PlaylistDetailPage = async ({ params }: { params: Promise<{ id: string }> 
     <PlaylistDetailClient
       playlist={playlist}
       tracks={tracks ?? []}
+      isOwner={playlist.user_id === user.id}
     />
   )
 }

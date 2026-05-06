@@ -10,6 +10,14 @@ export type Playlist = {
   Track: { count: number }[]
 }
 
+export type Group = {
+  id: string
+  name: string
+  invite_code: string
+  created_by: string
+  GroupMember: { count: number }[]
+}
+
 const HomePage = async () => {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -27,10 +35,17 @@ const HomePage = async () => {
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
+  const { data: groups } = await supabase
+    .from('Group')
+    .select('id, name, invite_code, created_by, GroupMember(count)')
+    .order('created_at', { ascending: false })
+
   return (
     <ShelfClient
+      userId={user.id}
       nickname={profile?.nickname ?? user.email ?? ''}
       playlists={(playlists ?? []) as Playlist[]}
+      groups={(groups ?? []) as Group[]}
     />
   )
 }
