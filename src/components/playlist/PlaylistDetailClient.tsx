@@ -36,9 +36,10 @@ type Track = {
 type Props = {
   playlist: Playlist;
   tracks: Track[];
+  isOwner: boolean;
 };
 
-const PlaylistDetailClient = ({ playlist, tracks }: Props) => {
+const PlaylistDetailClient = ({ playlist, tracks, isOwner }: Props) => {
   const router = useRouter();
   const [editOpen, setEditOpen] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
@@ -76,21 +77,16 @@ const PlaylistDetailClient = ({ playlist, tracks }: Props) => {
         <h1 className="flex-1 text-lg font-semibold truncate">
           {playlist.title}
         </h1>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={() => setEditOpen(true)}
-        >
-          <HugeiconsIcon icon={Edit01Icon} strokeWidth={2} />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          disabled={isPending}
-          onClick={handleDeletePlaylist}
-        >
-          <HugeiconsIcon icon={Delete01Icon} strokeWidth={2} />
-        </Button>
+        {isOwner && (
+          <>
+            <Button variant="ghost" size="icon-sm" onClick={() => setEditOpen(true)}>
+              <HugeiconsIcon icon={Edit01Icon} strokeWidth={2} />
+            </Button>
+            <Button variant="ghost" size="icon-sm" disabled={isPending} onClick={handleDeletePlaylist}>
+              <HugeiconsIcon icon={Delete01Icon} strokeWidth={2} />
+            </Button>
+          </>
+        )}
       </header>
 
       <main className={`flex-1 px-4 ${currentTrack ? "pb-40" : "pb-24"}`}>
@@ -142,17 +138,19 @@ const PlaylistDetailClient = ({ playlist, tracks }: Props) => {
                       {track.artist}
                     </p>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    disabled={isPending}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRemoveTrack(track.id);
-                    }}
-                  >
-                    <HugeiconsIcon icon={Delete01Icon} strokeWidth={2} />
-                  </Button>
+                  {isOwner && (
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      disabled={isPending}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveTrack(track.id);
+                      }}
+                    >
+                      <HugeiconsIcon icon={Delete01Icon} strokeWidth={2} />
+                    </Button>
+                  )}
                 </li>
               );
             })}
@@ -160,17 +158,17 @@ const PlaylistDetailClient = ({ playlist, tracks }: Props) => {
         )}
       </main>
 
-      <div
-        className={`fixed right-6 z-10 ${currentTrack ? "bottom-24" : "bottom-6"}`}
-      >
-        <Button
-          size="icon-lg"
-          className="rounded-full shadow-lg"
-          onClick={() => setAddOpen(true)}
-        >
-          <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
-        </Button>
-      </div>
+      {isOwner && (
+        <div className={`fixed right-6 z-10 ${currentTrack ? "bottom-24" : "bottom-6"}`}>
+          <Button
+            size="icon-lg"
+            className="rounded-full shadow-lg"
+            onClick={() => setAddOpen(true)}
+          >
+            <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
+          </Button>
+        </div>
+      )}
 
       {currentTrack && (
         <PlayerBar
