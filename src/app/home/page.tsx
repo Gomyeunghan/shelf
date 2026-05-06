@@ -7,7 +7,7 @@ export type Playlist = {
   title: string
   cover_image: string | null
   created_at: string
-  Track?: { id: string }[]
+  Track: { count: number }[]
 }
 
 const HomePage = async () => {
@@ -23,7 +23,7 @@ const HomePage = async () => {
 
   const { data: playlists } = await supabase
     .from('Playlist')
-    .select('id, title, cover_image, created_at')
+    .select('id, title, cover_image, created_at, Track(count)')
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 

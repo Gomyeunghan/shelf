@@ -25,6 +25,7 @@ type YTPlayer = {
 const useYouTubePlayer = (tracks: Track[]) => {
   const playerRef = useRef<YTPlayer | null>(null)
   const pendingTrackRef = useRef<Track | null>(null)
+  const playNextRef = useRef<() => void>(() => {})
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
 
@@ -44,6 +45,7 @@ const useYouTubePlayer = (tracks: Track[]) => {
           },
           onStateChange: (event: { data: number }) => {
             setIsPlaying(event.data === 1)
+            if (event.data === 0) playNextRef.current()
           },
         },
       })
@@ -79,6 +81,11 @@ const useYouTubePlayer = (tracks: Track[]) => {
     const idx = tracks.findIndex(t => t.id === currentTrack.id)
     if (idx > 0) playTrack(tracks[idx - 1])
   }, [currentTrack, tracks, playTrack])
+
+  // playNextRef를 항상 최신 함수로 유지
+  useEffect(() => {
+    playNextRef.current = playNext
+  }, [playNext])
 
   return { playTrack, togglePlay, playNext, playPrev, currentTrack, isPlaying }
 }
