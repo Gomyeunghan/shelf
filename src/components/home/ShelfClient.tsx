@@ -25,7 +25,7 @@ type Playlist = {
   title: string;
   cover_image: string | null;
   created_at: string;
-  Track?: { id: string }[];
+  Track: { count: number }[];
 };
 
 type Props = {
@@ -44,6 +44,8 @@ const ShelfClient = ({ nickname, playlists }: Props) => {
       await deletePlaylist(id);
     });
   };
+
+  console.log(playlists);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -87,7 +89,7 @@ const ShelfClient = ({ nickname, playlists }: Props) => {
                             {playlist.title}
                           </CardTitle>
                           <CardDescription>
-                            {playlist.Track?.length ?? 0}곡
+                            {playlist.Track?.[0]?.count ?? 0}곡
                           </CardDescription>
                         </Link>
                         <div className="flex gap-1 shrink-0">
