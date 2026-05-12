@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Figtree } from "next/font/google";
 import Script from "next/script";
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import PageTransition from "@/components/ui/PageTransition";
@@ -39,6 +40,7 @@ export default function RootLayout({
       )}
     >
       <body className="h-screen overflow-hidden bg-muted/40 md:py-8 flex flex-col">
+        <NextTopLoader color="var(--foreground)" height={2} showSpinner={false} />
         <Script src="https://www.youtube.com/iframe_api" strategy="lazyOnload" />
         <PlayerProvider>
           <div className="w-full max-w-md mx-auto flex flex-col flex-1 md:h-[calc(100vh-4rem)] bg-background border-x border-foreground/5 md:rounded-2xl md:border shadow-[0_0_60px_rgba(0,0,0,0.12)] overflow-hidden">
