@@ -10,6 +10,12 @@ import {
   type ReactNode,
 } from "react";
 
+declare global {
+  interface Window {
+    onYouTubeIframeAPIReady: () => void;
+  }
+}
+
 export type Track = {
   id: string;
   title: string;
