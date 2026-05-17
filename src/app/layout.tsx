@@ -22,6 +22,12 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Shelf",
+  manifest: "/manifest.webmanifest", // Next.js가 manifest.ts를 변환해줌
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Shelf",
+  },
   description: "친구들과 음악 플레이리스트를 공유하는 그룹 공간",
 };
 
@@ -36,12 +42,19 @@ export default function RootLayout({
         geistSans.variable,
         geistMono.variable,
         "font-sans",
-        figtree.variable
+        figtree.variable,
       )}
     >
       <body className="h-screen overflow-hidden bg-muted/40 md:py-8 flex flex-col">
-        <NextTopLoader color="var(--foreground)" height={2} showSpinner={false} />
-        <Script src="https://www.youtube.com/iframe_api" strategy="lazyOnload" />
+        <NextTopLoader
+          color="var(--foreground)"
+          height={2}
+          showSpinner={false}
+        />
+        <Script
+          src="https://www.youtube.com/iframe_api"
+          strategy="lazyOnload"
+        />
         <PlayerProvider>
           <div className="w-full max-w-md mx-auto flex flex-col flex-1 md:h-[calc(100vh-4rem)] bg-background border-x border-foreground/5 md:rounded-2xl md:border shadow-[0_0_60px_rgba(0,0,0,0.12)] overflow-hidden">
             <div className="flex-1 overflow-y-auto">
