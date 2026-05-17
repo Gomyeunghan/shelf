@@ -28,6 +28,9 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     title: "Shelf",
   },
+  icons: {
+    apple: "/apple-touch-icon.png", // iOS 홈화면 아이콘 추가
+  },
   description: "친구들과 음악 플레이리스트를 공유하는 그룹 공간",
 };
 
